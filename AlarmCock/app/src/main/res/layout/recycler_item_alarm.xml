@@ -39,7 +39,8 @@ android:layout_margin="@dimen/recycler_layout_spacing">
             android:id="@+id/switch1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.27" />
+            android:layout_weight="0.27"
+            android:onClick="enableAlarm" />
 
         <ImageButton
             android:id="@+id/imageButton"
