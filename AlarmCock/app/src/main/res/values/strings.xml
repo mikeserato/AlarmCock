@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AlarmCock</string>
+    <string name="shake">SHAKE!!!</string>
 </resources>
