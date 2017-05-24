@@ -8,7 +8,9 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.Calendar;
 
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements AlarmListFragment
     }
 
     public void enableAlarm(View view) {
+
+        Switch s = (Switch)findViewById(R.id.switch1);
+
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.SECOND, 5);
 
@@ -52,7 +57,13 @@ public class MainActivity extends AppCompatActivity implements AlarmListFragment
                 12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager am =
                 (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                pendingIntent);
+
+        if(s.isChecked()){
+            am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+        }
+        else{
+            am.cancel(pendingIntent);
+        }
+
     }
 }
