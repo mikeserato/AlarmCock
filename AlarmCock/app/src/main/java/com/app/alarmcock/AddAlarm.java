@@ -14,10 +14,13 @@ import java.util.Calendar;
 
 public class AddAlarm extends AppCompatActivity {
 
-    @Override
+    private AlarmDatabaseHelper alarmDatabaseHelper;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_alarm);
+
+        alarmDatabaseHelper = new AlarmDatabaseHelper(this.getApplicationContext());
     }
 
     public void onCancelClick(View view) {
@@ -26,26 +29,22 @@ public class AddAlarm extends AppCompatActivity {
     }
 
     public void onOKClick(View view) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
-
         TimePicker alarmTimePicker;
-        Calendar calendar = Calendar.getInstance();
-
-        int currentMinute = calendar.get(Calendar.MINUTE);
-
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
+
+        int alarmHour = alarmTimePicker.getHour();
         int alarmMinute = alarmTimePicker.getMinute();
 
-        int difference = Math.abs(alarmMinute - currentMinute);
-        calendar.add(Calendar.MINUTE, difference);
+        String time;
+        if(alarmMinute < 10) {
+            time = alarmHour + ":0" + alarmMinute;
+        } else {
+            time = alarmHour + ":" + alarmMinute;
+        }
 
-        Intent intent = new Intent(this, AlarmActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager am =
-                (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
+        alarmDatabaseHelper.insertAlarm(alarmDatabaseHelper.getReadableDatabase(), time);
 
-        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

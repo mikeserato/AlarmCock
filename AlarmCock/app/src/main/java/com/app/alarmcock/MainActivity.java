@@ -49,8 +49,14 @@ public class MainActivity extends AppCompatActivity implements AlarmListFragment
 
         Switch s = (Switch)findViewById(R.id.switch1);
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, 5);
+        Calendar calendar = Calendar.getInstance();
+        int currentMinute = calendar.get(Calendar.MINUTE);
+
+        //get alarm from database (id)
+        int alarmMinute = 0;
+
+        int difference = Math.abs(alarmMinute - currentMinute);
+        calendar.add(Calendar.MINUTE, difference);
 
         Intent intent = new Intent(this, AlarmActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -58,8 +64,10 @@ public class MainActivity extends AppCompatActivity implements AlarmListFragment
         AlarmManager am =
                 (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
 
+        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
         if(s.isChecked()){
-            am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         } else{
             am.cancel(pendingIntent);
         }
