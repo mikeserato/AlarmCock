@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity implements AlarmListFragment
         int alarmMinute = 0;
 
         int difference = Math.abs(alarmMinute - currentMinute);
-        calendar.add(Calendar.MINUTE, difference);
+//        calendar.add(Calendar.MINUTE, difference);
+        calendar.add(Calendar.SECOND, 5);
+
 
         Intent intent = new Intent(this, AlarmActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
