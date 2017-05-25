@@ -4,14 +4,14 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Switch;
 
@@ -61,9 +61,24 @@ public class MainActivity extends AppCompatActivity implements AlarmListFragment
         int difference = Math.abs(alarmMinute - currentMinute);
         calendar.add(Calendar.MINUTE, difference);
 
+        int idAlarm = 0;
+        try{
+            SQLiteOpenHelper alarmDatabaseHelper = new AlarmDatabaseHelper(this);
+            SQLiteDatabase db = alarmDatabaseHelper.getReadableDatabase();
+
+            Cursor cursor = db.query("ALARM", new String[] {"_id"}, "TIME=?", new String[] {s.getText().toString()}, null, null, null);
+
+            if(cursor.moveToFirst()){
+                idAlarm = cursor.getInt(0);
+            }
+
+            cursor.close();
+            db.close();
+        }catch(SQLiteException e){}
+
         Intent intent = new Intent(this, AlarmActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                idAlarm, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager am =
                 (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
 
