@@ -21,7 +21,8 @@
             android:name=".AddAlarm"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".AlarmActivity"></activity>
+        <activity android:name=".AlarmActivity">
+        </activity>
     </application>
 
 </manifest>

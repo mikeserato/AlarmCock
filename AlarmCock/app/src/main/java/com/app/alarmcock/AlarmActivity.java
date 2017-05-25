@@ -2,6 +2,10 @@ package com.app.alarmcock;
 
 import android.app.Activity;
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -12,9 +16,19 @@ import android.view.WindowManager;
 
 import java.io.IOException;
 
-public class AlarmActivity extends Activity {
+public class AlarmActivity extends Activity implements SensorEventListener{
 
     private MediaPlayer mMediaPlayer;
+
+    private SensorManager mSensorManager;
+    private Sensor mSensor;
+
+    private float[] mGravity;
+    private float mAccel;
+    private float mAccelCurrent;
+    private float mAccelLast;
+
+    private int threshold = 500;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,6 +39,52 @@ public class AlarmActivity extends Activity {
         setContentView(R.layout.activity_alarm_shake);
 
         playSound(this, getAlarmUri());
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mAccel = 0.00f;
+        mAccelCurrent = SensorManager.GRAVITY_EARTH;
+        mAccelLast = SensorManager.GRAVITY_EARTH;
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+            mGravity = sensorEvent.values.clone();
+
+            float x = mGravity[0];
+            float y = mGravity[1];
+            float z = mGravity[2];
+            mAccelLast = mAccelCurrent;
+            mAccelCurrent = (float)Math.sqrt(x*x + y*y + z*z);
+            float delta = mAccelCurrent - mAccelLast;
+            mAccel = mAccel * 0.9f + delta;
+            if(mAccel > 3) {
+                threshold--;
+
+                if (threshold < 0) {
+                    mMediaPlayer.stop();
+                    finish();
+
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    protected void onPause() {
+        super.onPause();
+        mSensorManager.unregisterListener(this);
+    }
+
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mSensor, mSensorManager.SENSOR_DELAY_FASTEST);
     }
 
     private void playSound(Context context, Uri alert) {
@@ -37,6 +97,7 @@ public class AlarmActivity extends Activity {
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                 mMediaPlayer.prepare();
                 mMediaPlayer.start();
+                mSensorManager.registerListener(this, mSensor, mSensorManager.SENSOR_DELAY_FASTEST);
             }
         } catch (IOException e) {
             System.out.println("OOPS");
