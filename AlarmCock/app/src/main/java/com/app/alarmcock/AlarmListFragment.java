@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -133,6 +134,7 @@ public class AlarmListFragment extends Fragment {
         private ImageView mImageView;
         private TextView mNameTextView;
         private Switch mSwitch;
+        private ImageButton mDelete;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -141,6 +143,7 @@ public class AlarmListFragment extends Fragment {
             mImageView = (ImageView) itemView.findViewById(R.id.alarm_image);
             mNameTextView = (TextView) itemView.findViewById(R.id.name);
             mSwitch = (Switch) itemView.findViewById(R.id.switch1);
+            mDelete = (ImageButton) itemView.findViewById(R.id.imageButton);
 
         }
 
@@ -148,6 +151,7 @@ public class AlarmListFragment extends Fragment {
             mImageView.setImageResource(imageResId);
             mNameTextView.setText(label);
             mSwitch.setText(name);
+            mDelete.setTransitionName(name);
         }
     }
 

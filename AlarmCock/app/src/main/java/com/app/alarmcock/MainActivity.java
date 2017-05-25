@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Switch;
 
 import java.util.Calendar;
@@ -81,7 +82,10 @@ public class MainActivity extends AppCompatActivity implements AlarmListFragment
             SQLiteOpenHelper alarmDatabaseHelper = new AlarmDatabaseHelper(this);
             SQLiteDatabase db = alarmDatabaseHelper.getReadableDatabase();
 
-            db.delete("ALARM", "TIME=?", new String[] {"2:44"});
+            ImageButton button = (ImageButton)view;
+            String time = button.getTransitionName().toString();
+
+            db.delete("ALARM", "TIME=?", new String[] {time});
 
             db.close();
         }catch(SQLiteException e){}
