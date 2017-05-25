@@ -42,7 +42,7 @@ android:layout_margin="@dimen/recycler_layout_spacing">
             android:onClick="enableAlarm" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.27"

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Switch;
 
 import java.util.Calendar;
@@ -47,19 +48,17 @@ public class MainActivity extends AppCompatActivity implements AlarmListFragment
     }
 
     public void enableAlarm(View view) {
-
         Switch s = (Switch)view;
+
+        String[] minuteArray = s.getText().toString().split(":");
 
         Calendar calendar = Calendar.getInstance();
         int currentMinute = calendar.get(Calendar.MINUTE);
 
-        //get alarm from database (id)
-        int alarmMinute = 0;
+        int alarmMinute = Integer.parseInt(minuteArray[1]);
 
         int difference = Math.abs(alarmMinute - currentMinute);
-//        calendar.add(Calendar.MINUTE, difference);
-        calendar.add(Calendar.SECOND, 5);
-
+        calendar.add(Calendar.MINUTE, difference);
 
         Intent intent = new Intent(this, AlarmActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
