@@ -17,8 +17,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.Random;
 
