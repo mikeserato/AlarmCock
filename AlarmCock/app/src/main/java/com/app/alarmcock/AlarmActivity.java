@@ -11,8 +11,13 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.Random;
@@ -53,8 +58,22 @@ public class AlarmActivity extends Activity implements SensorEventListener{
 
             mSensorManager.registerListener(this, mSensor, mSensorManager.SENSOR_DELAY_FASTEST);
         }
-        else
+        else {
             setContentView(R.layout.activity_alarm_question);
+
+            Button button = (Button)findViewById(R.id.submit);
+            button.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    String answer = ((EditText)findViewById(R.id.answer)).getText().toString();
+                    answer = answer.toLowerCase();
+
+                    if(answer.equals("yes")){
+                        mMediaPlayer.stop();
+                        finish();
+                    }
+                }
+            });
+        }
 
         playSound(this, getAlarmUri());
 
@@ -78,7 +97,6 @@ public class AlarmActivity extends Activity implements SensorEventListener{
                 if (threshold < 0) {
                     mMediaPlayer.stop();
                     finish();
-
                 }
             }
         }

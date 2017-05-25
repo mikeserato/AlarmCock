@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements AlarmListFragment
 
     public void enableAlarm(View view) {
 
-        Switch s = (Switch)findViewById(R.id.switch1);
+        Switch s = (Switch)view;
 
         Calendar calendar = Calendar.getInstance();
         int currentMinute = calendar.get(Calendar.MINUTE);
