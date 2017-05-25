@@ -36,6 +36,7 @@ public class AlarmActivity extends Activity implements SensorEventListener{
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_alarm_shake);
 
         playSound(this, getAlarmUri());
