@@ -47,6 +47,7 @@ public class AlarmActivity extends Activity implements SensorEventListener{
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
+        mSensorManager.registerListener(this, mSensor, mSensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
@@ -94,11 +95,10 @@ public class AlarmActivity extends Activity implements SensorEventListener{
             mMediaPlayer.setDataSource(context, alert);
             final AudioManager audioManager = (AudioManager) context
                     .getSystemService(Context.AUDIO_SERVICE);
-            if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
-                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            if (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) != 0) {
+                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 mMediaPlayer.prepare();
                 mMediaPlayer.start();
-                mSensorManager.registerListener(this, mSensor, mSensorManager.SENSOR_DELAY_FASTEST);
             }
         } catch (IOException e) {
             System.out.println("OOPS");
