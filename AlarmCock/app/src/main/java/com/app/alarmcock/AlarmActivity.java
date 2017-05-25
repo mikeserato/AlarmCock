@@ -23,6 +23,7 @@ import java.util.Random;
 public class AlarmActivity extends Activity implements SensorEventListener{
 
     private MediaPlayer mMediaPlayer;
+    private MediaPlayer mp;
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
@@ -72,7 +73,7 @@ public class AlarmActivity extends Activity implements SensorEventListener{
                 }
             });
         }
-
+        mp = MediaPlayer.create(this, R.raw.chicken);
         playSound(this, getAlarmUri());
 
     }
@@ -91,7 +92,7 @@ public class AlarmActivity extends Activity implements SensorEventListener{
             mAccel = mAccel * 0.9f + delta;
             if(mAccel > 3) {
                 threshold--;
-
+                mp.start();
                 if (threshold < 0) {
                     mMediaPlayer.stop();
                     finish();
