@@ -4,6 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,8 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class AlarmListFragment extends Fragment {
 
+public class AlarmListFragment extends Fragment {
     private int[] mImageResIds;
     private String[] mNames;
     private OnAlarmSelected mListener;
@@ -35,9 +40,37 @@ public class AlarmListFragment extends Fragment {
             throw new ClassCastException(context.toString() + " must implement OnAlarmSelected.");
         }
 
+        try{
+            SQLiteOpenHelper alarmDatabaseHelper = new AlarmDatabaseHelper(context);
+            SQLiteDatabase db = alarmDatabaseHelper.getReadableDatabase();
+
+            long numRows = DatabaseUtils.longForQuery(db, "SELECT COUNT(*) FROM ALARM", null);
+            int rowLength = (int) numRows;
+            mNames = new String[rowLength];
+
+            Cursor cursor = db.query("ALARM", new String[]{"TIME", "STATUS", "VIBRATE", "TYPE"},
+                    null, null, null, null, null);
+
+            int i = 0;
+
+            if(cursor.moveToFirst()){
+                do{
+                    String timeText = cursor.getString(0);
+    //                int statusInt = cursor.getInt(1);
+    //                int vibrateInt = cursor.getInt(2);
+    //                String typeText = cursor.getString(3);
+
+                    mNames[i] = timeText;
+                    i++;
+                }while(cursor.moveToNext());
+            }
+
+            cursor.close();
+            db.close();
+        }catch(SQLiteException e){}
+
         // Get alarm names
         final Resources resources = context.getResources();
-        mNames = resources.getStringArray(R.array.names);
 
         // Get alarm images.
         final TypedArray typedArray = resources.obtainTypedArray(R.array.images);

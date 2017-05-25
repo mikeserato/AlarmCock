@@ -27,6 +27,7 @@
             android:id="@+id/cancelButton"
             android:layout_width="165dp"
             android:layout_height="wrap_content"
+            android:onClick="onCancelClick"
             android:text="Cancel"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="370dp" />
@@ -35,6 +36,7 @@
             android:id="@+id/okButton"
             android:layout_width="165dp"
             android:layout_height="wrap_content"
+            android:onClick="onOKClick"
             android:text="OK"
             tools:layout_editor_absoluteX="194dp"
             tools:layout_editor_absoluteY="370dp" />

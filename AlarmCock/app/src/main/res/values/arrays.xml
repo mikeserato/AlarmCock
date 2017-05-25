@@ -6,12 +6,12 @@
         <item>@drawable/egg</item>
         <item>@drawable/egg</item>
         <item>@drawable/egg</item>
+        <item>@drawable/egg</item>
+        <item>@drawable/egg</item>
+        <item>@drawable/egg</item>
+        <item>@drawable/egg</item>
+        <item>@drawable/egg</item>
+        <item>@drawable/egg</item>
     </array>
 
-    <string-array name="names">
-        <item>6:00 AM</item>
-        <item>7:00 AM</item>
-        <item>8:00 AM</item>
-        <item>9:00 AM</item>
-    </string-array>
 </resources>

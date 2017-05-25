@@ -4,13 +4,13 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.SystemClock;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Switch;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import java.util.Calendar;
 
@@ -60,10 +60,23 @@ public class MainActivity extends AppCompatActivity implements AlarmListFragment
 
         if(s.isChecked()){
             am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-        }
-        else{
+        } else{
             am.cancel(pendingIntent);
         }
 
+    }
+
+    public void onDeleteAlarmClick(View view) {
+        try{
+            SQLiteOpenHelper alarmDatabaseHelper = new AlarmDatabaseHelper(this);
+            SQLiteDatabase db = alarmDatabaseHelper.getReadableDatabase();
+
+            db.delete("ALARM", "TIME=?", new String[] {"2:44"});
+
+            db.close();
+        }catch(SQLiteException e){}
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
