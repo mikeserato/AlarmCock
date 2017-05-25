@@ -28,20 +28,17 @@ public class AddAlarm extends AppCompatActivity {
     public void onOKClick(View view) {
 //        Intent intent = new Intent(this, MainActivity.class);
 //        startActivity(intent);
-        final Intent myIntent = new Intent(this, AlarmActivity.class);
 
         TimePicker alarmTimePicker;
-        final Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
+
+        int currentMinute = calendar.get(Calendar.MINUTE);
 
         alarmTimePicker = (TimePicker) findViewById(R.id.timePicker);
+        int alarmMinute = alarmTimePicker.getMinute();
 
-        final int hour = alarmTimePicker.getHour();
-        final int minute = alarmTimePicker.getMinute();
-
-        Log.d("MyActivity", "In the receiver with " + hour + " and " + minute);
-
-        calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getHour());
-        calendar.set(Calendar.MINUTE, alarmTimePicker.getMinute());
+        int difference = Math.abs(alarmMinute - currentMinute);
+        calendar.add(Calendar.MINUTE, difference);
 
         Intent intent = new Intent(this, AlarmActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
@@ -50,6 +47,5 @@ public class AddAlarm extends AppCompatActivity {
                 (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
 
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
     }
 }
