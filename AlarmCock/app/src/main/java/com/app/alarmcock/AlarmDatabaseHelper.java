@@ -21,25 +21,15 @@ public class AlarmDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
         db.execSQL("CREATE TABLE ALARM("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "TIME TEXT,"
-                + "STATUS INTEGER,"
-                + "VIBRATE INTEGER,"
-                + "TYPE TEXT);");
+                + "TIME TEXT;");
 
         insertAlarm(db, "2:41");
         insertAlarm(db, "2:42");
-        insertAlarm(db, "2:43");
-        insertAlarm(db, "2:44");
-        insertAlarm(db, "2:45");
-        insertAlarm(db, "2:46");
     }
 
     protected static void insertAlarm(SQLiteDatabase db, String time){
         ContentValues alarmValues = new ContentValues();
         alarmValues.put("TIME", time);
-        alarmValues.put("STATUS", "1");
-        alarmValues.put("VIBRATE", "1");
-        alarmValues.put("TYPE", "SHAKE");
 
         db.insert("ALARM", null, alarmValues);
     }

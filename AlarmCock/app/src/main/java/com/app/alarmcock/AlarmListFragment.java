@@ -18,12 +18,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 
 public class AlarmListFragment extends Fragment {
     private int[] mImageResIds;
     private String[] mNames;
+    private String[] mLabels;
     private OnAlarmSelected mListener;
 
     public static AlarmListFragment newInstance() {
@@ -47,20 +49,17 @@ public class AlarmListFragment extends Fragment {
             long numRows = DatabaseUtils.longForQuery(db, "SELECT COUNT(*) FROM ALARM", null);
             int rowLength = (int) numRows;
             mNames = new String[rowLength];
+            mLabels = new String[rowLength];
 
-            Cursor cursor = db.query("ALARM", new String[]{"TIME", "STATUS", "VIBRATE", "TYPE"},
-                    null, null, null, null, null);
+            Cursor cursor = db.query("ALARM", new String[]{"TIME"}, null, null, null, null, null);
 
             int i = 0;
 
             if(cursor.moveToFirst()){
                 do{
                     String timeText = cursor.getString(0);
-    //                int statusInt = cursor.getInt(1);
-    //                int vibrateInt = cursor.getInt(2);
-    //                String typeText = cursor.getString(3);
-
                     mNames[i] = timeText;
+                    mLabels[i] = "Alarm " + (i+1);
                     i++;
                 }while(cursor.moveToNext());
             }
@@ -112,7 +111,8 @@ public class AlarmListFragment extends Fragment {
         public void onBindViewHolder(ViewHolder viewHolder, final int position) {
             final int imageResId = mImageResIds[position];
             final String name = mNames[position];
-            viewHolder.setData(imageResId, name);
+            final String label = mLabels[position];
+            viewHolder.setData(imageResId, name, label);
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -132,6 +132,7 @@ public class AlarmListFragment extends Fragment {
         // Views
         private ImageView mImageView;
         private TextView mNameTextView;
+        private Switch mSwitch;
 
         private ViewHolder(View itemView) {
             super(itemView);
@@ -139,11 +140,14 @@ public class AlarmListFragment extends Fragment {
             // Get references to image and name.
             mImageView = (ImageView) itemView.findViewById(R.id.alarm_image);
             mNameTextView = (TextView) itemView.findViewById(R.id.name);
+            mSwitch = (Switch) itemView.findViewById(R.id.switch1);
+
         }
 
-        private void setData(int imageResId, String name) {
+        private void setData(int imageResId, String name, String label) {
             mImageView.setImageResource(imageResId);
-            mNameTextView.setText(name);
+            mNameTextView.setText(label);
+            mSwitch.setText(name);
         }
     }
 
