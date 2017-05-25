@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class AlarmActivity extends Activity implements SensorEventListener{
 
@@ -30,6 +31,8 @@ public class AlarmActivity extends Activity implements SensorEventListener{
 
     private int threshold = 500;
 
+    private boolean view;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,17 +40,24 @@ public class AlarmActivity extends Activity implements SensorEventListener{
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_alarm_shake);
+        Random random = new Random();
+        view = random.nextBoolean();
+        if(view) {
+            setContentView(R.layout.activity_alarm_shake);
+
+            mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            mAccel = 0.00f;
+            mAccelCurrent = SensorManager.GRAVITY_EARTH;
+            mAccelLast = SensorManager.GRAVITY_EARTH;
+
+            mSensorManager.registerListener(this, mSensor, mSensorManager.SENSOR_DELAY_FASTEST);
+        }
+        else
+            setContentView(R.layout.activity_alarm_question);
 
         playSound(this, getAlarmUri());
 
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mAccel = 0.00f;
-        mAccelCurrent = SensorManager.GRAVITY_EARTH;
-        mAccelLast = SensorManager.GRAVITY_EARTH;
-
-        mSensorManager.registerListener(this, mSensor, mSensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
@@ -81,12 +91,14 @@ public class AlarmActivity extends Activity implements SensorEventListener{
 
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(this);
+        if(view)
+            mSensorManager.unregisterListener(this);
     }
 
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mSensor, mSensorManager.SENSOR_DELAY_FASTEST);
+        if(view)
+            mSensorManager.registerListener(this, mSensor, mSensorManager.SENSOR_DELAY_FASTEST);
     }
 
     private void playSound(Context context, Uri alert) {
