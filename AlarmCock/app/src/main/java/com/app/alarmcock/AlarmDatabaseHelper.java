@@ -34,11 +34,7 @@ public class AlarmDatabaseHelper extends SQLiteOpenHelper {
         insertAlarm(db, "2:46");
     }
 
-    private static void insertAlarm(SQLiteDatabase db, String time){
-//        int time=(picker.getCurrentMinute() * 60 + picker.getCurrentHour() * 60 * 60) * 1000;
-//        SimpleDateFormat format = new SimpleDateFormat();
-//        String formatted = format.format(time);
-
+    protected static void insertAlarm(SQLiteDatabase db, String time){
         ContentValues alarmValues = new ContentValues();
         alarmValues.put("TIME", time);
         alarmValues.put("STATUS", "1");
